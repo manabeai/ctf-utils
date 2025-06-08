@@ -18,6 +18,18 @@ This is a CTF utilities repository that provides various tools to help with CTF 
   - `app.py` - Flask application for serving static and dynamic content
   - `static/` - Static files directory
   - `js/` - JavaScript utilities
+- `pwntools-examples/` - Pwntools usage examples for binary exploitation
+  - `pwntools_examples.ipynb` - Jupyter notebook with comprehensive pwntools examples including:
+    - Basic I/O operations and connections
+    - Packing/unpacking data
+    - Buffer overflow examples
+    - ROP (Return Oriented Programming)
+    - Format string attacks
+    - Shellcode execution
+    - Heap exploitation basics
+    - GDB debugging integration
+    - Cryptographic utilities
+    - Useful CTF utilities
 
 ## Development Guidelines
 

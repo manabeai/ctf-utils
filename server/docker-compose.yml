@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  ctf-server:
+    build: .
+    container_name: ctf-utils-server
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./static:/app/static
+      - ./js:/app/js
+      - ./templates:/app/templates
+      - ./requests.log:/app/requests.log
+    environment:
+      - FLASK_ENV=development
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
