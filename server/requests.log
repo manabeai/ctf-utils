@@ -1,0 +1,113 @@
+2025-06-08 18:29:15,791 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.22:5000
+2025-06-08 18:29:15,791 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-08 18:29:15,792 - INFO -  * Restarting with stat
+2025-06-08 18:29:15,901 - WARNING -  * Debugger is active!
+2025-06-08 18:29:15,906 - INFO -  * Debugger PIN: 113-787-258
+2025-06-08 18:30:04,848 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.22:5000
+2025-06-08 18:30:04,848 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-08 18:30:04,848 - INFO -  * Restarting with stat
+2025-06-08 18:30:04,958 - WARNING -  * Debugger is active!
+2025-06-08 18:30:04,959 - INFO -  * Debugger PIN: 113-787-258
+2025-06-08 18:31:15,478 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.22:5000
+2025-06-08 18:31:15,478 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-08 18:31:15,480 - INFO -  * Restarting with stat
+2025-06-08 18:31:15,581 - WARNING -  * Debugger is active!
+2025-06-08 18:31:15,581 - INFO -  * Debugger PIN: 144-294-401
+2025-06-08 18:31:18,405 - INFO - 
+==================================================
+REQUEST LOG:
+{
+  "timestamp": "2025-06-08T18:31:18.403287",
+  "method": "GET",
+  "url": "http://127.0.0.1:5000/",
+  "path": "/",
+  "remote_addr": "127.0.0.1",
+  "headers": {
+    "Host": "127.0.0.1:5000",
+    "Connection": "keep-alive",
+    "Sec-Ch-Ua": "\"Chromium\";v=\"136\", \"Google Chrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+    "Sec-Ch-Ua-Mobile": "?0",
+    "Sec-Ch-Ua-Platform": "\"Linux\"",
+    "Dnt": "1",
+    "Upgrade-Insecure-Requests": "1",
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+    "Sec-Fetch-Site": "none",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-User": "?1",
+    "Sec-Fetch-Dest": "document",
+    "Accept-Encoding": "gzip, deflate, br, zstd",
+    "Accept-Language": "ja-JP,ja;q=0.9,en-US;q=0.8,en;q=0.7"
+  },
+  "args": {},
+  "form": {},
+  "json": null,
+  "data": "",
+  "cookies": {},
+  "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+  "referrer": null,
+  "scheme": "http",
+  "is_secure": false,
+  "host": "127.0.0.1:5000",
+  "content_type": null,
+  "content_length": null
+}
+==================================================
+2025-06-08 18:31:18,405 - INFO - 127.0.0.1 - - [08/Jun/2025 18:31:18] "GET / HTTP/1.1" 200 -
+2025-06-08 18:31:18,900 - INFO - 
+==================================================
+REQUEST LOG:
+{
+  "timestamp": "2025-06-08T18:31:18.899770",
+  "method": "GET",
+  "url": "http://127.0.0.1:5000/favicon.ico",
+  "path": "/favicon.ico",
+  "remote_addr": "127.0.0.1",
+  "headers": {
+    "Host": "127.0.0.1:5000",
+    "Connection": "keep-alive",
+    "Sec-Ch-Ua-Platform": "\"Linux\"",
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+    "Sec-Ch-Ua": "\"Chromium\";v=\"136\", \"Google Chrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+    "Dnt": "1",
+    "Sec-Ch-Ua-Mobile": "?0",
+    "Accept": "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
+    "Sec-Fetch-Site": "same-origin",
+    "Sec-Fetch-Mode": "no-cors",
+    "Sec-Fetch-Dest": "image",
+    "Referer": "http://127.0.0.1:5000/",
+    "Accept-Encoding": "gzip, deflate, br, zstd",
+    "Accept-Language": "ja-JP,ja;q=0.9,en-US;q=0.8,en;q=0.7"
+  },
+  "args": {},
+  "form": {},
+  "json": null,
+  "data": "",
+  "cookies": {},
+  "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+  "referrer": "http://127.0.0.1:5000/",
+  "scheme": "http",
+  "is_secure": false,
+  "host": "127.0.0.1:5000",
+  "content_type": null,
+  "content_length": null
+}
+==================================================
+2025-06-08 18:31:18,900 - INFO - 127.0.0.1 - - [08/Jun/2025 18:31:18] "GET /favicon.ico HTTP/1.1" 200 -
+2025-06-08 18:31:48,012 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.22:5000
+2025-06-08 18:31:48,012 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-08 18:31:48,012 - INFO -  * Restarting with stat
+2025-06-08 18:31:48,113 - WARNING -  * Debugger is active!
+2025-06-08 18:31:48,113 - INFO -  * Debugger PIN: 144-294-401
