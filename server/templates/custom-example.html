@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Custom Template Example</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .info-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Custom Template Loaded!</h1>
+        <div class="info-box">
+            <h2>Request Details:</h2>
+            <ul>
+                <li>IP Address: {{ request.remote_addr }}</li>
+                <li>User Agent: {{ request.user_agent.string }}</li>
+                <li>Referer: {{ request.referrer or 'Direct' }}</li>
+                <li>Timestamp: {{ request.args.get('time', 'Now') }}</li>
+            </ul>
+        </div>
+        <div class="info-box">
+            <h2>Custom Parameters:</h2>
+            {% for key, value in request.args.items() %}
+                <p><strong>{{ key }}:</strong> {{ value }}</p>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="/js/tracker.js"></script>
+</body>
+</html>

@@ -1,9 +1,10 @@
-from flask import Flask, request, send_from_directory, Response, send_file
+from flask import Flask, request, send_from_directory, Response, send_file, render_template_string
 import json
 import logging
 from datetime import datetime
 import os
 import mimetypes
+import re
 
 app = Flask(__name__, static_folder='static')
 
@@ -126,11 +127,196 @@ document.body.innerHTML += '<div style="color:red;">XSS Payload Executed</div>';
     
     return payloads.get(filename, "// No custom payload for this file")
 
+@app.route('/dom/<path:template>')
+def serve_dom(template):
+    """カスタムDOMツリーを返す"""
+    templates_dir = os.path.join(app.root_path, 'templates')
+    if not os.path.exists(templates_dir):
+        os.makedirs(templates_dir)
+    
+    template_file = os.path.join(templates_dir, f"{template}.html")
+    
+    if os.path.exists(template_file):
+        with open(template_file, 'r') as f:
+            content = f.read()
+        return render_template_string(content, request=request)
+    else:
+        # 動的にテンプレートを生成
+        return generate_dynamic_dom(template)
+
+def generate_dynamic_dom(template_name):
+    """動的にDOMツリーを生成"""
+    dom_templates = {
+        'phishing': """
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - {{ request.args.get('site', 'Example') }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f0f0; }
+        .login-box { max-width: 400px; margin: 100px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; }
+        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+    </style>
+    <script src="/js/tracker.js"></script>
+</head>
+<body>
+    <div class="login-box">
+        <h2>Login to {{ request.args.get('site', 'Your Account') }}</h2>
+        <form action="{{ request.args.get('action', '/login') }}" method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p style="text-align: center; margin-top: 20px;">
+            <a href="#">Forgot password?</a>
+        </p>
+    </div>
+</body>
+</html>
+""",
+        'xss-playground': """
+<!DOCTYPE html>
+<html>
+<head>
+    <title>XSS Playground</title>
+    <script src="/js/xss-test.js"></script>
+</head>
+<body>
+    <h1>XSS Testing Ground</h1>
+    <div id="user-content">
+        <!-- User input will be reflected here -->
+        {{ request.args.get('input', '') | safe }}
+    </div>
+    <div>
+        <h2>Query Parameters:</h2>
+        <ul>
+        {% for key, value in request.args.items() %}
+            <li>{{ key }}: {{ value | safe }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+    <script>
+        // Vulnerable to DOM-based XSS
+        var userInput = "{{ request.args.get('script', '') | safe }}";
+        if (userInput) {
+            eval(userInput);
+        }
+    </script>
+</body>
+</html>
+""",
+        'iframe-container': """
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IFrame Container</title>
+    <style>
+        iframe { width: 100%; height: 600px; border: 2px solid #333; }
+        .controls { padding: 20px; background: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <h2>IFrame Loader</h2>
+        <p>Loading: {{ request.args.get('url', 'about:blank') }}</p>
+    </div>
+    <iframe src="{{ request.args.get('url', 'about:blank') }}" 
+            sandbox="{{ request.args.get('sandbox', '') }}"
+            id="target-frame">
+    </iframe>
+    <script>
+        // Post messages to parent
+        window.addEventListener('message', function(e) {
+            console.log('Received message:', e.data);
+            parent.postMessage('Echo: ' + e.data, '*');
+        });
+    </script>
+</body>
+</html>
+""",
+        'data-collector': """
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Collector</title>
+    <script src="/js/keylogger.js"></script>
+</head>
+<body>
+    <h1>Survey Form</h1>
+    <form id="dataForm">
+        <label>Name: <input type="text" name="name"></label><br>
+        <label>Email: <input type="email" name="email"></label><br>
+        <label>Phone: <input type="tel" name="phone"></label><br>
+        <label>Comments: <textarea name="comments"></textarea></label><br>
+        <button type="submit">Submit</button>
+    </form>
+    <script>
+        document.getElementById('dataForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var formData = new FormData(e.target);
+            var data = {};
+            formData.forEach(function(value, key) {
+                data[key] = value;
+            });
+            console.log('Form data collected:', data);
+            
+            // Send to server
+            fetch('/collect', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+        });
+    </script>
+</body>
+</html>
+"""
+    }
+    
+    if template_name in dom_templates:
+        return render_template_string(dom_templates[template_name], request=request)
+    else:
+        # デフォルトの動的テンプレート
+        return f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic Template: {template_name}</title>
+    <meta charset="utf-8">
+    <script src="/js/tracker.js"></script>
+</head>
+<body>
+    <h1>Dynamic DOM: {template_name}</h1>
+    <p>This is a dynamically generated template.</p>
+    <div id="dynamic-content">
+        <h2>Request Information:</h2>
+        <ul>
+            <li>Template: {template_name}</li>
+            <li>Method: {request.method}</li>
+            <li>Path: {request.path}</li>
+            <li>User Agent: {request.user_agent.string}</li>
+        </ul>
+    </div>
+    <script>
+        console.log('Dynamic template loaded:', '{template_name}');
+    </script>
+</body>
+</html>
+"""
+
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
     """全てのパスをキャッチ"""
-    # HTMLレスポンスでJavaScriptを自動的に含める
+    # クエリパラメータでテンプレートを指定可能
+    template = request.args.get('template', 'default')
+    
+    if template != 'default':
+        return generate_dynamic_dom(template)
+    
+    # デフォルトのHTMLレスポンス
     html_response = f"""
 <!DOCTYPE html>
 <html>
@@ -143,6 +329,18 @@ def catch_all(path):
     <p>Method: {request.method}</p>
     <p>Path: {request.path}</p>
     <p>Full URL: {request.url}</p>
+    
+    <h2>Available Templates:</h2>
+    <ul>
+        <li><a href="/dom/phishing?site=Google&action=/fake-login">Phishing Template</a></li>
+        <li><a href="/dom/xss-playground?input=<script>alert('XSS')</script>">XSS Playground</a></li>
+        <li><a href="/dom/iframe-container?url=https://example.com">IFrame Container</a></li>
+        <li><a href="/dom/data-collector">Data Collector</a></li>
+    </ul>
+    
+    <h2>Dynamic Template:</h2>
+    <p>Add ?template=NAME to any URL to load a custom template</p>
+    
     <script src="/js/custom.js"></script>
 </body>
 </html>
